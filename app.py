@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
 from streamlit_option_menu import option_menu
-
+import base64
 # Change Name & Logo
 st.set_page_config(page_title="Disease Prediction", page_icon="⚕️")
 
@@ -15,30 +15,37 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# Adding Background Image
-background_image_url = "https://www.strategyand.pwc.com/m1/en/strategic-foresight/sector-strategies/healthcare/ai-powered-healthcare-solutions/img01-section1.jpg"  # Replace with your image URL
+# Function to encode image to base64
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
+# Convert the local image to a base64-encoded string
+background_image_base64 = get_base64("medicc.jpg")
+
+# Inject CSS for the background image
 page_bg_img = f"""
 <style>
 [data-testid="stAppViewContainer"] {{
-background-image: url({background_image_url});
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-background-attachment: fixed;
+    background-image: url("data:image/jpg;base64,{background_image_base64}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }}
 
 [data-testid="stAppViewContainer"]::before {{
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0, 0, 0, 0.7);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
 }}
 </style>
 """
+
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Load the saved models
